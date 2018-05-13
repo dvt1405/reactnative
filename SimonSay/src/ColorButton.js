@@ -16,17 +16,17 @@ class ColorButton extends Component {
         return (
             <TouchableOpacity onPress ={this._onPress} isPressed = {true}>
                 <View
-                    style ={{
-                        width: 40,
-                        height: 40,
-                        backgroundColor: this.props.bgColor,
-                        borderRadius: 5
-
-                    }}
+                    style ={[styles.sizes, {backgroundColor: this.props.bgColor}]}
                 /> 
             </TouchableOpacity>    
         );
     }
 }
-
+const styles = StyleSheet.create({
+    sizes: {
+        width: 40,
+        height: 40,
+        borderRadius: 5
+    }
+})
 export default ColorButton;
