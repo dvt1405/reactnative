@@ -11,33 +11,31 @@ import {
   Text,
   View
 } from 'react-native';
-import ColorButton from './ColorButton';
 import GamePlay from './GamePlay';
+import GameOver from './GameOver';
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
   android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-//Component
-//Props
-//State
-
-const Text2 = props => (
-  <Text>
-    {props.children}
-    {props.username}
-
-  </Text>
-);
 
 export default class App extends Component {
   state = {
-
+    isPlaying: true,
+    score: 0
   }
+  _onGameOver = score =>
+   this.setState({
+     isPlaying: false,
+     score
+   });
+   _onReplay = () => this.setState({isPlaying: true});
   render() {
+
     return (
-      <GamePlay />
+      this.state.isPlaying ? <GamePlay onGameOver = {this._onGameOver}/> 
+      :(<GameOver score = {this.state.score} onReplay = {this._onReplay}/>)
     );
   }
 }
