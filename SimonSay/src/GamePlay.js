@@ -8,10 +8,7 @@ import {
 } from 'react-native';
 
 import ColorButton from './components/ColorButton';
-
-// const Notice = props => (
-//     <Text>{props.note}{props.children}</Text>
-// )
+import Sound from 'react-native-sound';
 class GamePlay extends Component {
     state = {
         colors: ['red', '#475841', '#FFD400', '#392061'],
@@ -24,7 +21,21 @@ class GamePlay extends Component {
             new Animated.Value(1),
             new Animated.Value(1),
         ],
-        buttonDisable: false
+        buttonDisable: false,
+        sounds: [
+            new Sound('pling1.mp3', Sound.MAIN_BUNDLE, (erro) => {
+                erro ? console.log('erro', enrro) : null
+            }),
+            new Sound('pling2.mp3', Sound.MAIN_BUNDLE, (erro) => {
+                erro ? console.log('erro', enrro) : null
+            }),
+            new Sound('pling3.mp3', Sound.MAIN_BUNDLE, (erro) => {
+                erro ? console.log('erro', enrro) : null
+            }),
+            new Sound('pling4.mp3', Sound.MAIN_BUNDLE, (erro) => {
+                erro ? console.log('erro', enrro) : null
+            })
+        ]
     }
     componentDidMount() {
         this._increaseDifficulty();
@@ -47,19 +58,24 @@ class GamePlay extends Component {
                     this.state.opacity[this.state.requirement[index]],
                     {
                         toValue: 0,
-                        duration: 250
-                    }
+                        duration: 250,
+                    },
+                    this.state.sounds[this.state.requirement[index]].play()
                 ),
                 Animated.delay(200),
                 Animated.timing(
                     this.state.opacity[this.state.requirement[index]],
                     {
                         toValue: 1,
-                        duration: 250
-                    }
+                        duration: 150
+                    },
                 ),
-            ]).start(() => this._flashButton(index + 1))
-            : this.setState({ buttonDisable: false})
+                Animated.delay(250),
+            ]).start(() => {
+                Animated.delay(200).start();
+                this._flashButton(index + 1)
+            })
+            : this.setState({ buttonDisable: false })
     }
     result = (id) => {
         this.setState({
@@ -76,10 +92,12 @@ class GamePlay extends Component {
         })
     }
 
-    _onButtonPressed = id => {
+    _onButtonPressed = (id) => {
         id == this.state.requirement[this.state.arrButtonPressed.length] ?
             this._progress(this.state.arrButtonPressed.concat(id)) :
-            this.props.onGameOver(this.state.requirement.length - 1)
+            this.props.onGameOver(this.state.requirement.length - 1);
+        this.state.sounds[id].play()
+        this.state.sounds[id].setCurrentTime(0.1);
     };
     render() {
         const { width, height } = Dimensions.get('window');
@@ -91,7 +109,8 @@ class GamePlay extends Component {
                     id={index}
                     bgColor={color}
                     opacity={this.state.opacity[index]}
-                    disabled = {this.state.buttonDisable}
+                    disabled={this.state.buttonDisable}
+                    playSound={this.state.sounds[this.state.requirement[index]]}
                 />
             ));
         return (
