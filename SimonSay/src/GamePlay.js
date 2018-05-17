@@ -47,7 +47,7 @@ class GamePlay extends Component {
             buttonDisable: true
         },
             () => {
-                this._flashButton(0);
+                setTimeout(() => { this._flashButton(0) }, 200);
             }
         );
     }
@@ -58,11 +58,12 @@ class GamePlay extends Component {
                     this.state.opacity[this.state.requirement[index]],
                     {
                         toValue: 0,
-                        duration: 250,
+                        duration: 150,
                     },
-                    this.state.sounds[this.state.requirement[index]].play()
+                    this.state.sounds[this.state.requirement[index]].play(), // doan nay khong chay dau, ham Animated.timing(value, config) no khong co callback. Chi co 2 parameter thoi nen em dang truyen parameter thu 3 vao no se khong dung den. Cai phat am thanh nay voi' animation khong lien quan gi nhau ca nen em cho no chay rieng la dc
+                    this.state.sounds[this.state.requirement[index]].setCurrentTime(0.1)
                 ),
-                Animated.delay(200),
+                Animated.delay(150),
                 Animated.timing(
                     this.state.opacity[this.state.requirement[index]],
                     {
@@ -70,10 +71,11 @@ class GamePlay extends Component {
                         duration: 150
                     },
                 ),
-                Animated.delay(250),
             ]).start(() => {
-                Animated.delay(200).start();
-                this._flashButton(index + 1)
+                // cai nay no delay 200s xong khong lam gi ca, em muon lam gi sau do thi phai de no la function callback ben trong start (vi du chinh la dong tren dong nay)
+                // con cai nay thi no chay ngay lap tuc
+                // setTimeout(() => {this._flashButton(index+1)}, 200) cho nay em dung setTimeout la duoc, khong can animation
+                setTimeout(() => {this._flashButton(index+1)}, 100)
             })
             : this.setState({ buttonDisable: false })
     }
@@ -84,7 +86,7 @@ class GamePlay extends Component {
         this._increaseDifficulty()
     }
     _progress = (arrButtonPressed) => {
-        arrButtonPressed.length === this.state.requirement.length ? this._increaseDifficulty() : this.setState({ arrButtonPressed });
+        arrButtonPressed.length === this.state.requirement.length ? setTimeout(() => {this._increaseDifficulty()}, 750): this.setState({ arrButtonPressed });
     }
     _reset() {
         this.setState({
@@ -110,13 +112,11 @@ class GamePlay extends Component {
                     bgColor={color}
                     opacity={this.state.opacity[index]}
                     disabled={this.state.buttonDisable}
-                    playSound={this.state.sounds[this.state.requirement[index]]}
                 />
             ));
         return (
             <View style={styles.container}>
                 <Text>Score: {this.state.requirement.length - 1} </Text>
-                <Text>{this.state.arrButtonPressed}</Text>
                 <View style={[
                     styles.gameBoard,
                     {

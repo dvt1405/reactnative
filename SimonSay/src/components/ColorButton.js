@@ -13,9 +13,6 @@ class ColorButton extends Component {
     _onPress = () => {
         this.props.onButtonPressed(this.props.id);
     }
-    playSound = () =>{
-        this.props._playsound(this.props.id)
-    }
     render() {
         return (
             <TouchableOpacity
@@ -27,8 +24,7 @@ class ColorButton extends Component {
                     {
                         backgroundColor: this.props.bgColor,
                         opacity: this.props.opacity
-                    }]}
-                    playSounds = {this.playSound}                        
+                    }]}                     
                 />
             </TouchableOpacity>
         );
