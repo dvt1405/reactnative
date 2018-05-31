@@ -60,7 +60,7 @@ class GamePlay extends Component {
                         toValue: 0,
                         duration: 150,
                     },
-                    this.state.sounds[this.state.requirement[index]].play(), // doan nay khong chay dau, ham Animated.timing(value, config) no khong co callback. Chi co 2 parameter thoi nen em dang truyen parameter thu 3 vao no se khong dung den. Cai phat am thanh nay voi' animation khong lien quan gi nhau ca nen em cho no chay rieng la dc
+                    this.state.sounds[this.state.requirement[index]].play(),
                     this.state.sounds[this.state.requirement[index]].setCurrentTime(0.1)
                 ),
                 Animated.delay(150),
@@ -73,29 +73,21 @@ class GamePlay extends Component {
                 ),
             ]).start(() => {
                 // cai nay no delay 200s xong khong lam gi ca, em muon lam gi sau do thi phai de no la function callback ben trong start (vi du chinh la dong tren dong nay)
-                // con cai nay thi no chay ngay lap tuc
-                // setTimeout(() => {this._flashButton(index+1)}, 200) cho nay em dung setTimeout la duoc, khong can animation
-                setTimeout(() => {this._flashButton(index+1)}, 100)
+                setTimeout(() => { this._flashButton(index + 1) }, 100)
             })
             : this.setState({ buttonDisable: false })
     }
-    result = (id) => {
+    _progress = (a) => {
+        a.length === this.state.requirement.length ? this._requess() : this.setState({ arrButtonPressed: a });
+    }
+    _requess = () => {
         this.setState({
-            arrButtonPressed: this.state.arrButtonPressed.concat(id),
+            buttonDisable: true
         })
-        this._increaseDifficulty()
+        setTimeout(() => { this._increaseDifficulty() }, 750)
     }
-    _progress = (arrButtonPressed) => {
-        arrButtonPressed.length === this.state.requirement.length ? setTimeout(() => {this._increaseDifficulty()}, 750): this.setState({ arrButtonPressed });
-    }
-    _reset() {
-        this.setState({
-            requirement: []
-        })
-    }
-
     _onButtonPressed = (id) => {
-        id == this.state.requirement[this.state.arrButtonPressed.length] ?
+        id === this.state.requirement[this.state.arrButtonPressed.length] ?
             this._progress(this.state.arrButtonPressed.concat(id)) :
             this.props.onGameOver(this.state.requirement.length - 1);
         this.state.sounds[id].play()
@@ -106,7 +98,7 @@ class GamePlay extends Component {
         const buttons = this.state.colors
             .map((color, index) => (
                 <ColorButton
-                    key={index}
+                    key={index}rr
                     onButtonPressed={this._onButtonPressed}
                     id={index}
                     bgColor={color}
@@ -116,7 +108,7 @@ class GamePlay extends Component {
             ));
         return (
             <View style={styles.container}>
-                <Text>Score: {this.state.requirement.length - 1} </Text>
+                <Text >Score: {this.state.requirement.length - 1} </Text>
                 <View style={[
                     styles.gameBoard,
                     {
@@ -139,7 +131,10 @@ const styles = StyleSheet.create({
     },
     gameBoard: {
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+    },
+    txt: {
+        flex: 1
     }
 });
 
