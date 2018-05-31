@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         backgroundColor: '#53B3CB',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     texts: {
-        fontSize: 35,
-        flex: 1
+        fontSize: 30,
+        flex: 1,
     }
 
 });
