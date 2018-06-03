@@ -1,0 +1,25 @@
+{"categories":[
+    {
+        "id": 0,
+        "name": "Length",
+        "units":[
+            {
+                "id": 0,
+                "name": "Meter",
+                "ratior": 1
+            },{
+                "id": 1,
+                "name": "Decimeter",
+                "ratior": 0.1
+            },{
+                "id": 2,
+                "name": "Centimeter",
+                "ratior": 0.01
+            },{
+                "id": 3,
+                "name": "Millimeter",
+                "ratior": 0.001
+            }
+        ]
+    }
+]}
